@@ -3,29 +3,29 @@ import time
 import decimal
 
 class Integral:
-    def __init__(self, expresstion:str, x1:int, x2:int, debug:bool=False):
+    def __init__(self, expression:str, x1:int, x2:int, debug:bool=False):
         """
         계산할 정적분식을 입력합니다.
         """
 
-        expresstion = expresstion.replace("^", "**")
-        self.expresstion = expresstion
+        expression = expression.replace("^", "**")
+        self.expression = expression
         self.x1 = decimal.Decimal(str(x1))
         self.x2 = decimal.Decimal(str(x2))
         self.debug = debug
 
-    def integral_expresstion(self) -> float:
+    def integral_expression(self) -> float:
         "심파이의 integrate를 이용하여 정적분을 계산합니다."
 
         x = sym.Symbol('x')
-        a = sym.integrate( eval(self.expresstion) , (x, self.x1, self.x2))
+        a = sym.integrate( eval(self.expression) , (x, self.x1, self.x2))
         return a
         
     def exp(self, x) -> float:
         """
         등록된 식을 계산하여 y값을 리턴합니다. (적분이 아닙니다.)
         """
-        return decimal.Decimal(str(eval(self.expresstion)))
+        return decimal.Decimal(str(eval(self.expression)))
 
     def square_left(self, x1, x2) -> float:
         """
@@ -58,7 +58,7 @@ class Integral:
         unit = decimal.Decimal(str(length / divisor))
         area = decimal.Decimal(str(0))
 
-        for i in range(1, divisor):
+        for i in range(1, divisor+1):
             _x1 = decimal.Decimal(str(self.x1 + unit * (i - 1)))
             _x2 = decimal.Decimal(str(self.x1 + unit * i))
             if mode == "left":
@@ -72,19 +72,19 @@ class Integral:
 
 
 if __name__ == "__main__":
-    expresstion = input("수식을 입력하세요: y=")
+    expression = input("수식을 입력하세요: y=")
     x1 = int(input("적분의 아래끝을 입력하세요: "))
     x2 = int(input("적분의 위끝을 입력하세요: "))
     divisor = int(input("사각형을 얼마나 나눌지 입력하세요: "))
     mode = input("어떤 리만합을 사용할까요? (left/right): ")
 
     start = time.time()
-    a = Integral(expresstion, x1, x2, debug=True)
-    a1 = a.integral_expresstion()
+    a = Integral(expression, x1, x2, debug=True)
+    a1 = a.integral_expression()
     a2 = a.square_integral(divisor,mode)
     elapsed_time = round(time.time() - start,3)
     print("="*20)
-    print(f"수식: y={expresstion}")
+    print(f"수식: y={expression}")
     print(f"범위: {x1}, {x2}")
     print(f"리만 합: {mode}, {divisor}로 나눔")
     print("="*20)
